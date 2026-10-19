@@ -1,0 +1,28 @@
+name: CI - Validacion del Sitio Web
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  validar-sitio:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo del repositorio
+        uses: actions/checkout@v4
+
+      - name: Validar presencia de archivos esenciales
+        run: |
+          echo "=== Verificando estructura del sitio web ==="
+          test -f index.html || (echo "ERROR: Falta index.html" && exit 1)
+          echo "OK: index.html presente."
+
+      - name: Comprobar etiquetas HTML basicas
+        run: |
+          echo "=== Verificando etiquetas HTML ==="
+          grep -i "<html" index.html
+          grep -i "</html>" index.html
+          echo "OK: El archivo contiene las etiquetas HTML principales."
